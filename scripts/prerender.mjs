@@ -27,7 +27,10 @@ const template = readFileSync(resolve(distDir, 'index.html'), 'utf-8');
 // /js/script.js and /api/event) rather than loaded straight from
 // plausible.io. This is Plausible's own documented fix for ad blockers:
 // many filter lists block the plausible.io domain by name, but a same-
-// origin request is invisible to them. Only injected into the production
+// origin request is invisible to them. The endpoint option below routes
+// the tracked events through the proxy too — without it, the script loads
+// from our domain but still POSTs events straight to plausible.io, which
+// gets blocked just the same. Only injected into the production
 // prerendered build, so local dev never sends events (analytics.ts no-ops
 // in dev for the same reason).
 //
@@ -35,7 +38,7 @@ const template = readFileSync(resolve(distDir, 'index.html'), 'utf-8');
 const analyticsScript = `    <script async src="/js/script.js"></script>
     <script>
       window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-      plausible.init()
+      plausible.init({ endpoint: '/api/event' })
     </script>`;
 
 // Static (non-tool) pages — keep these in sync with each page's useSeo()
