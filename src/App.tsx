@@ -20,6 +20,21 @@ const SplitPdf = lazy(() => import('./pages/SplitPdf'));
 const CompressImage = lazy(() => import('./pages/CompressImage'));
 const JpgToPdf = lazy(() => import('./pages/JpgToPdf'));
 
+// Vite renames chunk files with a new content hash on every build. If
+// someone has this site open in a tab across a deploy, their cached
+// index.html still points at the old filenames, and any lazy import()
+// after that (e.g. clicking into a tool) 404s with "Failed to fetch
+// dynamically imported module." The fix: reload once, which fetches the
+// current index.html and its correct asset references. Guarded with
+// sessionStorage so a page that's genuinely broken doesn't reload forever.
+window.addEventListener('vite:preloadError', () => {
+  const key = 'chunk-reload-attempted';
+  if (!sessionStorage.getItem(key)) {
+    sessionStorage.setItem(key, '1');
+    window.location.reload();
+  }
+});
+
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
