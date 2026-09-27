@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://YOURDOMAIN.com/</loc>
+  </url>
+  <url>
+    <loc>https://YOURDOMAIN.com/about</loc>
+  </url>
+  <url>
+    <loc>https://YOURDOMAIN.com/privacy</loc>
+  </url>
+  <url>
+    <loc>https://YOURDOMAIN.com/terms</loc>
+  </url>
+  <url>
+    <loc>https://YOURDOMAIN.com/contact</loc>
+  </url>
+  <url>
+    <loc>https://YOURDOMAIN.com/compress-pdf</loc>
+  </url>
+  <url>
+    <loc>https://YOURDOMAIN.com/merge-pdf</loc>
+  </url>
+  <url>
+    <loc>https://YOURDOMAIN.com/split-pdf</loc>
+  </url>
+  <url>
+    <loc>https://YOURDOMAIN.com/compress-image</loc>
+  </url>
+  <url>
+    <loc>https://YOURDOMAIN.com/jpg-to-pdf</loc>
+  </url>
+</urlset>
