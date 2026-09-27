@@ -10,7 +10,7 @@
 // build step, and Vite/TS can import it from the browser bundle unchanged.
 
 // TODO: replace with your real production domain before deploying.
-export const SITE_URL = 'https://YOURDOMAIN.com';
+export const SITE_URL = 'https://quicktools-peach.vercel.app';
 
 export const SITE_NAME = 'QuickTools';
 
