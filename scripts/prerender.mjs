@@ -15,19 +15,24 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { SITE_URL, SITE_NAME, OG_IMAGE_PATH, PLAUSIBLE_SCRIPT_URL } from '../site.config.mjs';
+import { SITE_URL, SITE_NAME, OG_IMAGE_PATH } from '../site.config.mjs';
 import { TOOLS } from '../src/lib/tools.data.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = resolve(__dirname, '../dist');
 const template = readFileSync(resolve(distDir, 'index.html'), 'utf-8');
 
-// Plausible (https://plausible.io) — cookie-free analytics. Site identity
-// is now encoded in PLAUSIBLE_SCRIPT_URL itself (copied from your Plausible
-// dashboard's Site Installation snippet), rather than a data-domain
-// attribute. Only injected into the production prerendered build, so local
-// dev never sends events (analytics.ts no-ops in dev for the same reason).
-const analyticsScript = `    <script async src="${PLAUSIBLE_SCRIPT_URL}"></script>
+// Plausible (https://plausible.io) — cookie-free analytics, proxied
+// through this site's own domain (see vercel.json rewrites for
+// /js/script.js and /api/event) rather than loaded straight from
+// plausible.io. This is Plausible's own documented fix for ad blockers:
+// many filter lists block the plausible.io domain by name, but a same-
+// origin request is invisible to them. Only injected into the production
+// prerendered build, so local dev never sends events (analytics.ts no-ops
+// in dev for the same reason).
+//
+// If you ever change the proxy path in vercel.json, update it here too.
+const analyticsScript = `    <script async src="/js/script.js"></script>
     <script>
       window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
       plausible.init()
