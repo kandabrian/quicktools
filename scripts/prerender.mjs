@@ -15,19 +15,23 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { SITE_URL, SITE_NAME, OG_IMAGE_PATH } from '../site.config.mjs';
+import { SITE_URL, SITE_NAME, OG_IMAGE_PATH, PLAUSIBLE_SCRIPT_URL } from '../site.config.mjs';
 import { TOOLS } from '../src/lib/tools.data.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = resolve(__dirname, '../dist');
 const template = readFileSync(resolve(distDir, 'index.html'), 'utf-8');
 
-// Plausible (https://plausible.io) — cookie-free analytics. The domain it
-// reports under is derived from SITE_URL so it can't drift out of sync.
-// Only injected into the production prerendered build, so local dev never
-// sends events (analytics.ts no-ops in dev for the same reason).
-const analyticsDomain = new URL(SITE_URL).hostname;
-const analyticsScript = `    <script defer data-domain="${analyticsDomain}" src="https://plausible.io/js/script.js"></script>`;
+// Plausible (https://plausible.io) — cookie-free analytics. Site identity
+// is now encoded in PLAUSIBLE_SCRIPT_URL itself (copied from your Plausible
+// dashboard's Site Installation snippet), rather than a data-domain
+// attribute. Only injected into the production prerendered build, so local
+// dev never sends events (analytics.ts no-ops in dev for the same reason).
+const analyticsScript = `    <script async src="${PLAUSIBLE_SCRIPT_URL}"></script>
+    <script>
+      window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()
+    </script>`;
 
 // Static (non-tool) pages — keep these in sync with each page's useSeo()
 // call in src/pages/*.tsx.
